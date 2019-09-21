@@ -6,20 +6,15 @@
 package visao;
 
 import dao.AlunoDAO;
-import dao.TurmaDAO;
-import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import modelo.Aluno;
-import modelo.Turma;
 
-/**
- *
- * @author Darlan
- */
 public class CadastroAlunoJFrame extends javax.swing.JFrame {
     
     private final AlunoDAO dao;
-    private final TurmaDAO turmaDAO;
+    public static final int STATTUS_CADASTRO = -1;
+    private int id = STATTUS_CADASTRO;
+    
 
     /**
      * Creates new form CadastroAlunoJFrame
@@ -27,25 +22,20 @@ public class CadastroAlunoJFrame extends javax.swing.JFrame {
     public CadastroAlunoJFrame() {
         initComponents();
         
+        jTextFieldAluno.setText("");
+        jTextFieldAluno.requestFocus();
+        
         dao = new AlunoDAO();
-        turmaDAO = new TurmaDAO();
-        adicionarTurmas();
     }
     
-    // sobrecarga de metodo
-    
+    //sobrecarga de metodo
     CadastroAlunoJFrame(Aluno aluno) {
         this();
-    
-        for (int i = 0; i < jComboBoxTurma.getItemCount(); i++) {
-            Turma turma = (Turma) jComboBoxTurma.getItemAt(i);
-            if (aluno.getIdTurma() == turma.getId()) {
-                jComboBoxTurma.setSelectedIndex(i);
-               break;
-            }
-        }
+        id = aluno.getId();
+        jTextFieldAluno.setText(aluno.getAluno());
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,39 +45,24 @@ public class CadastroAlunoJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jComboBoxTurma = new javax.swing.JComboBox<modelo.Turma>();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jTextFieldAluno = new javax.swing.JTextField();
-        jTextFieldNota1 = new javax.swing.JTextField();
-        jTextFieldNota2 = new javax.swing.JTextField();
-        jTextFieldNota3 = new javax.swing.JTextField();
         jButtonSair = new javax.swing.JButton();
         jButtonSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jLabel1.setText("Turma");
-
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jLabel2.setText("Aluno");
-
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jLabel3.setText("Nota 1");
-
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jLabel4.setText("Nota 2");
-
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jLabel5.setText("Nota 3");
+        jLabel2.setText("Nome do Aluno");
 
         jButtonSair.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jButtonSair.setText("Sair");
+        jButtonSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSairActionPerformed(evt);
+            }
+        });
 
         jButtonSalvar.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jButtonSalvar.setText("Salvar");
@@ -105,26 +80,9 @@ public class CadastroAlunoJFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldAluno)
-                    .addComponent(jComboBoxTurma, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldNota1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jTextFieldNota2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(0, 34, Short.MAX_VALUE))
-                            .addComponent(jTextFieldNota3)))
+                        .addComponent(jLabel2)
+                        .addGap(0, 134, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -134,36 +92,16 @@ public class CadastroAlunoJFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxTurma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldAluno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addGap(28, 28, 28))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTextFieldNota1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldNota2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldNota3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(47, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonSalvar)
-                            .addComponent(jButtonSair))
-                        .addContainerGap())))
+                .addComponent(jTextFieldAluno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSair)
+                    .addComponent(jButtonSalvar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -172,7 +110,37 @@ public class CadastroAlunoJFrame extends javax.swing.JFrame {
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         // TODO add your handling code here:
+        Aluno aluno = new Aluno();
+        
+        String nome = jTextFieldAluno.getText();
+        if (nome.trim().length() < 3) {
+            JOptionPane.showMessageDialog(this, "Nome deve conter entre 4 e 50 caracteres", "Aviso", JOptionPane.WARNING_MESSAGE);
+            jTextFieldAluno.requestFocus();
+            return;
+        }
+        aluno.setAluno(nome);
+        if (this.id == STATTUS_CADASTRO) {
+            int id = dao.inserir(aluno);
+            JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            jTextFieldAluno.setText("");
+            jTextFieldAluno.requestFocus();
+        } else {
+            aluno.setId(this.id);
+            boolean alterou = dao.alterar(aluno);
+            if (alterou) {
+                JOptionPane.showMessageDialog(this, "Nome do aluno alterado com sucesso", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possivel alterar o nome do aluno", "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        
     }//GEN-LAST:event_jButtonSalvarActionPerformed
+
+    private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jButtonSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,24 +180,8 @@ public class CadastroAlunoJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonSair;
     private javax.swing.JButton jButtonSalvar;
-    private javax.swing.JComboBox<modelo.Turma> jComboBoxTurma;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextFieldAluno;
-    private javax.swing.JTextField jTextFieldNota1;
-    private javax.swing.JTextField jTextFieldNota2;
-    private javax.swing.JTextField jTextFieldNota3;
     // End of variables declaration//GEN-END:variables
 
-    private void adicionarTurmas() {
-        ArrayList<Turma> turmas = turmaDAO.obterTodos("");
-        DefaultComboBoxModel defaultComboBoxModel = (DefaultComboBoxModel) jComboBoxTurma.getModel();
-        for (Turma turma : turmas) {
-            defaultComboBoxModel.addElement(turma);
-        }
-        jComboBoxTurma.setSelectedIndex(-1);
-    }
-}
+  }

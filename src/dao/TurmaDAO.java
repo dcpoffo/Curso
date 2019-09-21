@@ -55,6 +55,7 @@ public class TurmaDAO extends BaseDAO implements GenericInterface<Turma>{
             ps.setString(1, entidade.getTurma());
             ps.setInt(2, entidade.getId());
             return ps.executeUpdate() == 1;
+            
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -77,6 +78,7 @@ public class TurmaDAO extends BaseDAO implements GenericInterface<Turma>{
             ps.setInt(1, id);
             int quantidadeAfetada = ps.executeUpdate();
             return quantidadeAfetada == 1;
+            
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

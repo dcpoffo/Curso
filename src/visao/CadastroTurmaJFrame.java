@@ -34,8 +34,6 @@ public class CadastroTurmaJFrame extends javax.swing.JFrame {
         this();
         id = turma.getId();
         jTextFieldTurma.setText(turma.getTurma());
-        
-        
     }
 
     /**
@@ -123,6 +121,7 @@ public class CadastroTurmaJFrame extends javax.swing.JFrame {
         String nome = jTextFieldTurma.getText();
         if (nome.trim().length() < 2){
             JOptionPane.showMessageDialog(this, "Nome deve conter entre 2 e 80 caracteres", "Aviso", JOptionPane.WARNING_MESSAGE);
+            jTextFieldTurma.requestFocus();;
             return;
         }
         
