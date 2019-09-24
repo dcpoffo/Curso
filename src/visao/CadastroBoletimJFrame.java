@@ -8,9 +8,12 @@ package visao;
 import dao.AlunoDAO;
 import dao.BoletimDAO;
 import dao.TurmaDAO;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import modelo.Aluno;
+import modelo.Boletim;
 import modelo.Turma;
 
 /**
@@ -22,21 +25,20 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
     private final BoletimDAO dao;
     private final TurmaDAO turmaDAO;
     private final AlunoDAO alunoDAO;
-    
+
     public static final int STATUS_CADASTRO = -1;
     private int id = STATUS_CADASTRO;
-    
+
     public CadastroBoletimJFrame() {
         initComponents();
-        
+
         dao = new BoletimDAO();
         turmaDAO = new TurmaDAO();
         alunoDAO = new AlunoDAO();
-        
+
         adicionarTurma();
-        
         AdicionarAluno();
-        
+
     }
 
     /**
@@ -59,7 +61,7 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
         jTextFieldNota3 = new javax.swing.JTextField();
         jComboBoxTurma = new javax.swing.JComboBox();
         jComboBoxAluno = new javax.swing.JComboBox();
-        jTextFieldNota4 = new javax.swing.JTextField();
+        jTextFieldMedia = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jButtonSalvar = new javax.swing.JButton();
         jButtonSair = new javax.swing.JButton();
@@ -84,11 +86,19 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jLabel5.setText("Nota 3");
 
+        jTextFieldMedia.setEditable(false);
+        jTextFieldMedia.setBackground(new java.awt.Color(204, 204, 204));
+
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jLabel6.setText("Media");
 
         jButtonSalvar.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarActionPerformed(evt);
+            }
+        });
 
         jButtonSair.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jButtonSair.setText("Sair");
@@ -128,13 +138,13 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel6)
-                                            .addComponent(jTextFieldNota4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(jTextFieldMedia, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(6, 6, 6)))
                         .addGap(0, 1, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -145,31 +155,27 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(7, 7, 7)
                 .addComponent(jComboBoxTurma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBoxAluno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldNota1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNota2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNota3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldMedia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBoxAluno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldNota1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNota2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNota3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNota4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 49, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonSair)
-                            .addComponent(jButtonSalvar))
-                        .addContainerGap())))
+                    .addComponent(jButtonSair)
+                    .addComponent(jButtonSalvar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -178,10 +184,80 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
 
     private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
         // TODO add your handling code here:
-        
         dispose();
-        
     }//GEN-LAST:event_jButtonSairActionPerformed
+
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+        // TODO add your handling code here:
+        Boletim boletim = new Boletim();
+
+        if (jComboBoxTurma.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione o nome da turma", "Aviso", JOptionPane.WARNING_MESSAGE);
+            jComboBoxTurma.showPopup();
+            return;
+        }
+
+        if (jComboBoxAluno.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione o nome do aluno", "Aviso", JOptionPane.WARNING_MESSAGE);
+            jComboBoxAluno.showPopup();
+            return;
+        }
+
+        try {
+            boletim.setNota1(Double.parseDouble(jTextFieldNota1.getText().replace(",", ".")));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Valor da Nota 1 é invalido", "Aviso", JOptionPane.WARNING_MESSAGE);
+            jTextFieldNota1.requestFocus();
+            return;
+        }
+
+        try {
+            boletim.setNota2(Double.parseDouble(jTextFieldNota2.getText().replace(",", ".")));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Valor da Nota 2 é invalido", "Aviso", JOptionPane.WARNING_MESSAGE);
+            jTextFieldNota2.requestFocus();
+            return;
+        }
+
+        try {
+            boletim.setNota3(Double.parseDouble(jTextFieldNota3.getText().replace(",", ".")));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Valor da Nota 3 é invalido", "Aviso", JOptionPane.WARNING_MESSAGE);
+            jTextFieldNota3.requestFocus();
+            return;
+        }
+
+        double nota1 = Double.parseDouble(jTextFieldNota1.getText());
+        double nota2 = Double.parseDouble(jTextFieldNota2.getText());
+        double nota3 = Double.parseDouble(jTextFieldNota3.getText());
+        //new DecimalFormat("##.##").format(variavel) 
+        double media = (nota1 + nota2 + nota3) / 3;
+        jTextFieldMedia.setText(String.valueOf(new DecimalFormat("##.##").format(media).replace(",", ".")));
+
+        Turma turma = (Turma) jComboBoxTurma.getSelectedItem();
+        Aluno aluno = (Aluno) jComboBoxAluno.getSelectedItem();
+        boletim.setIdTurma(turma.getId());
+        boletim.setIdAluno(aluno.getId());
+        boletim.setNota1(nota1);
+        boletim.setNota2(nota2);
+        boletim.setNota3(nota3);
+        boletim.setMedia(media);
+
+        if (this.id == STATUS_CADASTRO) {
+            int id = dao.inserir(boletim);
+            JOptionPane.showMessageDialog(this, "Boletim gerado com sucesso", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            limparTela();
+        } else {
+            boletim.setId(this.id);
+            boolean alterou = dao.alterar(boletim);
+            if (alterou) {
+                JOptionPane.showMessageDialog(this, "Boletim alterado com sucesso", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Bão foi possivel alterar o beletim", "Aviso", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,10 +306,10 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextFieldMedia;
     private javax.swing.JTextField jTextFieldNota1;
     private javax.swing.JTextField jTextFieldNota2;
     private javax.swing.JTextField jTextFieldNota3;
-    private javax.swing.JTextField jTextFieldNota4;
     // End of variables declaration//GEN-END:variables
 
     private void adicionarTurma() {
@@ -252,5 +328,15 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
             defaultComboBoxModel.addElement(aluno);
         }
         jComboBoxAluno.setSelectedIndex(-1);
+    }
+
+    private void limparTela() {
+        jComboBoxTurma.setSelectedIndex(-1);
+        jComboBoxAluno.setSelectedIndex(-1);
+        jTextFieldNota1.setText("");
+        jTextFieldNota2.setText("");
+        jTextFieldNota3.setText("");
+        jTextFieldMedia.setText("");
+        jComboBoxTurma.requestFocus();
     }
 }
