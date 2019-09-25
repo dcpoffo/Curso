@@ -8,6 +8,7 @@ package visao;
 import dao.BoletimDAO;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Boletim;
 
@@ -17,11 +18,12 @@ import modelo.Boletim;
  */
 public class ListaBoletimJFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ListaBoletimJFrame
-     */
+   private final BoletimDAO dao;
+    
     public ListaBoletimJFrame() {
         initComponents();
+        
+        dao = new BoletimDAO();
     }
 
     /**
@@ -64,9 +66,19 @@ public class ListaBoletimJFrame extends javax.swing.JFrame {
 
         jButtonEditar.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         jButtonApagar.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jButtonApagar.setText("Apagar");
+        jButtonApagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonApagarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jLabel1.setText("Nome da Tuma");
@@ -173,13 +185,13 @@ public class ListaBoletimJFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(30, 30, 30)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabelQuantidade))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -219,6 +231,43 @@ public class ListaBoletimJFrame extends javax.swing.JFrame {
         jTextFieldPesquisaTurma.setText("");
         atualizarTabela();
     }//GEN-LAST:event_jButtonLimparFiltroActionPerformed
+
+    private void jButtonApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApagarActionPerformed
+        // TODO add your handling code here:
+        if (jTable1.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro selecionado", "Aviso", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        int opcao = JOptionPane.showConfirmDialog(this, "Deseja realmente apagar?", "Aviso", JOptionPane.YES_NO_OPTION);
+        if (opcao == JOptionPane.YES_OPTION) {
+            int linhaSelecionada = jTable1.getSelectedRow();
+            int id = Integer.parseInt(jTable1.getValueAt(linhaSelecionada, 0).toString());
+            boolean apagou = dao.apagar(id);
+            if (apagou) {
+                atualizarTabela();
+                JOptionPane.showMessageDialog(this, "Registro apagado com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível apagar o registro", "Aviso", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButtonApagarActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        // TODO add your handling code here:
+        int linhaSelecionada = jTable1.getSelectedRow();
+        
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro selecionado", "Aviso", JOptionPane.ERROR_MESSAGE);
+            return;
+        } 
+        
+        int id = Integer.parseInt(jTable1.getValueAt(linhaSelecionada, 0).toString());
+        Boletim boletim = dao.ObterTodosId(id);
+        if (boletim != null) {
+            new CadastroBoletimJFrame(boletim).setVisible(true);
+        }
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
     /**
      * @param args the command line arguments

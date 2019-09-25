@@ -65,7 +65,24 @@ public class BoletimDAO extends BaseDAO implements GenericInterface<Boletim> {
 
     @Override
     public boolean alterar(Boletim entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conectar();
+            String sql = "update boletins set id_turma = ?, id_aluno = ?, nota1 = ?, nota2 = ?, nota3 = ?, media = ? where id =?";
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ps.setInt(1, entidade.getIdTurma());
+            ps.setInt(2, entidade.getIdAluno());
+            ps.setDouble(3, entidade.getNota1());
+            ps.setDouble(4, entidade.getNota2());
+            ps.setDouble(5, entidade.getNota3());
+            ps.setDouble(6, entidade.getMedia());
+            ps.setInt(7, entidade.getId());
+            return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            desconectar();
+        }
     }
 
     @Override
@@ -75,12 +92,46 @@ public class BoletimDAO extends BaseDAO implements GenericInterface<Boletim> {
 
     @Override
     public boolean apagar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conectar();
+            String sql = "delete from boletins where id = ?";
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ps.setInt(1, id);
+            int quantidadeAfetada = ps.executeUpdate();
+            return quantidadeAfetada == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            desconectar();
+        }
     }
 
     @Override
     public Boletim ObterTodosId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Boletim boletim = null;
+        try {
+            conectar();
+            String sql = "select * from boletins where id = ?";
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                boletim = new Boletim();
+                boletim.setId(rs.getInt("id"));
+                boletim.setIdTurma(rs.getInt("id_turma"));
+                boletim.setIdAluno(rs.getInt("id_aluno"));
+                boletim.setNota1(rs.getDouble("nota1"));
+                boletim.setNota2(rs.getDouble("nota2"));
+                boletim.setNota3(rs.getDouble("nota3"));
+                boletim.setMedia(rs.getDouble("media"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            desconectar();
+        }
+        return boletim;
     }
 
     @Override

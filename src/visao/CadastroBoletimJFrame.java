@@ -41,6 +41,32 @@ public class CadastroBoletimJFrame extends javax.swing.JFrame {
 
     }
 
+    CadastroBoletimJFrame(Boletim boletim) {
+        this();
+        id = boletim.getId();
+        jTextFieldNota1.setText(String.valueOf(boletim.getNota1()));
+        jTextFieldNota2.setText(String.valueOf(boletim.getNota2()));
+        jTextFieldNota3.setText(String.valueOf(boletim.getNota3()));
+        jTextFieldMedia.setText(String.valueOf(boletim.getMedia()));
+        
+        for (int i = 0; i < jComboBoxTurma.getItemCount(); i++) {
+            Turma turma = (Turma) jComboBoxTurma.getItemAt(i);
+            if (boletim.getIdTurma() == turma.getId()) {
+                jComboBoxTurma.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        for (int i =0; i < jComboBoxAluno.getItemCount(); i++) {
+            Aluno aluno = (Aluno) jComboBoxAluno.getItemAt(i);
+            if (boletim.getIdAluno() == aluno.getId()) {
+                jComboBoxAluno.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
